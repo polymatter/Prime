@@ -1,3 +1,4 @@
 This is a multiplayer game for about 2-4 players. It is collaborative game pitting players against computer mooks.
 
 13:42 7/12/2011 Initial Rails creation. database setup, initial map.
+15:33 7/12/2011 Map showing units, modifiable at browser level, no use of database. ie map/100/100/200/200, places a red arrow at (100,100) and a blue one at (200,200)
