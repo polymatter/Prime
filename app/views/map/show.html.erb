@@ -1,0 +1,28 @@
+
+<div class='map'
+  style="
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 1
+  ">
+  <%= image_tag("map.png") %>
+</div>
+<div class='hero1' 
+  style="
+	position: absolute;
+	left: <%= @redx %>px;
+	top: <%= @redy %>px;
+	z-index: 2
+  ">
+  <%= image_tag("hero1.png") %>
+</div>
+<div class='mook1'
+  style="
+ 	position: absolute;
+	left: <%= @blux %>px;
+	top: <%= @bluy %>px;
+	z-index: 3 
+  ">
+  <%= image_tag("mook1.png") %>
+</div>
