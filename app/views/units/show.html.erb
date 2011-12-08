@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @unit.name %>
+</p>
+
+<p>
+  <b>Map img:</b>
+  <%= @unit.map_img %>
+</p>
+
+<p>
+  <b>Node:</b>
+  <%= @unit.node_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_unit_path(@unit) %> |
+<%= link_to 'Back', units_path %>

@@ -1,10 +1,12 @@
 Prime::Application.routes.draw do
+  resources :units
   resources :nodes
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
-  match 'map' => 'map#show'
+  match 'map' => 'map#show', :as => 'map'
+  match 'unit_move/:unit/:node' => 'units#move', :as => 'unit_move'
   
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

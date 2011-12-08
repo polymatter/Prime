@@ -1,3 +1,14 @@
+<% @units.each do |unit| %>
+  <div class='unit' id='unit_<%= unit.id %>'
+    style="
+	  position: absolute;
+	  left: <%= unit.node.x - (20/2) %>px;
+	  top: <%= unit.node.y - (20/2) %>px;
+	  z-index: 2
+    ">
+  <img src='<%= image_path("#{unit.map_img}") %>' />
+  </div>
+<% end %>
 
 <div class='map'
   style="
@@ -12,7 +23,7 @@
 <map name='mapper' id='mapper'>
 <% @nodes.each do |node| %>
   <area shape='circle' coords='<%= node.x %>, <%= node.y %>, 20' 
-    href='javascript:alert("You clicked on the node called <%= node.name %>");' />
+    href='unit_move/1/<%= node.id %>' />
 <% end %>
 </map>
 
@@ -21,30 +32,7 @@
     position: absolute;
 	left: 20px;
 	top: 400px;
-	z-index: 5
+	z-index: 1
   ">
    <p>Click on a node. If it has been defined in the <a href='nodes'>database</a>, you should get a message box telling you its name</p>
 </div>
-
-<!---
-
-<div class='hero1' 
-  style="
-	position: absolute;
-	left: 0px;
-	top: 30px;
-	z-index: 2
-  ">
-  <%= image_tag("hero1.png") %>
-</div>
-<div class='mook1'
-  style="
- 	position: absolute;
-	left: 0px;
-	top: 0px;
-	z-index: 3 
-  ">
-  <%= image_tag("mook1.png") %>
-</div>
-
---/>
