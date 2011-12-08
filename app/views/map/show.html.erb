@@ -6,13 +6,33 @@
 	top: 0px;
 	z-index: 1
   ">
-  <%= image_tag("map.png") %>
+  <img src='<%= image_path("map.png") %>' usemap='#mapper' border='1' />
 </div>
+
+<map name='mapper' id='mapper'>
+<% @nodes.each do |node| %>
+  <area shape='circle' coords='<%= node.x %>, <%= node.y %>, 20' 
+    href='javascript:alert("You clicked on the node called <%= node.name %>");' />
+<% end %>
+</map>
+
+<div
+  style="
+    position: absolute;
+	left: 20px;
+	top: 400px;
+	z-index: 5
+  ">
+   <p>Click on a node. If it has been defined in the <a href='nodes'>database</a>, you should get a message box telling you its name</p>
+</div>
+
+<!---
+
 <div class='hero1' 
   style="
 	position: absolute;
-	left: <%= @redx %>px;
-	top: <%= @redy %>px;
+	left: 0px;
+	top: 30px;
 	z-index: 2
   ">
   <%= image_tag("hero1.png") %>
@@ -20,9 +40,11 @@
 <div class='mook1'
   style="
  	position: absolute;
-	left: <%= @blux %>px;
-	top: <%= @bluy %>px;
+	left: 0px;
+	top: 0px;
 	z-index: 3 
   ">
   <%= image_tag("mook1.png") %>
 </div>
+
+--/>

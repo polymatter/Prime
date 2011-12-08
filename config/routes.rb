@@ -1,8 +1,10 @@
 Prime::Application.routes.draw do
+  resources :nodes
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
-  match 'map/:redx/:redy/:blux/:bluy' => 'map#show'
+  match 'map' => 'map#show'
   
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
