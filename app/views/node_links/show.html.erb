@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Node:</b>
+  <%= @node_link.node_id %>
+</p>
+
+<p>
+  <b>Linked node:</b>
+  <%= @node_link.linked_node_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_node_link_path(@node_link) %> |
+<%= link_to 'Back', node_links_path %>

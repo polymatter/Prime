@@ -1,4 +1,5 @@
 Prime::Application.routes.draw do
+  resources :node_links
   resources :units
   resources :nodes
 

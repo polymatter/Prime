@@ -1,0 +1,25 @@
+<%= form_for(@node_link) do |f| %>
+  <% if @node_link.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@node_link.errors.count, "error") %> prohibited this node_link from being saved:</h2>
+
+      <ul>
+      <% @node_link.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :node_id %><br />
+    <%= f.number_field :node_id %>
+  </div>
+  <div class="field">
+    <%= f.label :linked_node_id %><br />
+    <%= f.number_field :linked_node_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
