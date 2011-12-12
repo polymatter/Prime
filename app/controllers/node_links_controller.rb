@@ -2,7 +2,7 @@ class NodeLinksController < ApplicationController
   # GET /node_links
   # GET /node_links.json
   def index
-    @node_links = NodeLink.all
+    @node_links = NodeLink.order("node_id", "linked_node_id")
 
     respond_to do |format|
       format.html # index.html.erb

@@ -2,18 +2,26 @@ class UnitsController < ApplicationController
   def move
     @unit = Unit.find(params[:unit])
 	@node = Node.find(params[:node])
+    notice = @unit.name + ' can not move to ' + @node.name + ' from ' + @unit.node.name
 
     respond_to do |format|
-      if @unit.update_attributes({ "node_id" => params[:node] })
-        format.html { redirect_to map_path, notice: 'Unit was successfully moved.' }
-        format.json { head :ok }
-      else
-        format.html { redirect_to units_path }
-        format.json { render json: @unit.errors, status: :unprocessable_entity }
-      end
+      if @unit.node.linked_nodes.keep_if {|dest| dest.id == @node.id }.count > 0
+        if @unit.update_attributes({ "node_id" => params[:node] })
+          format.html { redirect_to map_path, notice: 'Unit was successfully moved.' }
+          format.json { head :ok }
+        else
+          format.html { redirect_to units_path }
+          format.json { render json: @unit.errors, status: :unprocessable_entity }
+        end
+	  else
+	    format.html { redirect_to map_path,
+          notice: notice}
+		format.json { render json: notice,
+		  status: :unprocessable_entity }
+	  end
     end
 	
-	end
+  end
 
   # GET /units
   # GET /units.json
