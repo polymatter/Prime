@@ -8,11 +8,13 @@
 <p>
   <b>Map img:</b>
   <%= @unit.map_img %>
+  <%= image_tag(@unit.map_img) %>
 </p>
 
 <p>
   <b>Node:</b>
-  <%= @unit.node_id %>
+  id = <%= @unit.node_id %>
+  link = <%= link_to @unit.node.name, @unit.node %>
 </p>
 
 
