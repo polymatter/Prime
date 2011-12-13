@@ -1,23 +1,24 @@
 class UnitsController < ApplicationController
+  http_basic_authenticate_with :name => "god", :password => "god", :except => :index
+
   def move
     @unit = Unit.find(params[:unit])
 	@node = Node.find(params[:node])
-    notice = @unit.name + ' can not move to ' + @node.name + ' from ' + @unit.node.name
-
+    fail_notice = @unit.name + ' can not move from ' + @unit.node.name + ' to ' + @node.name 
+    succ_notice = @unit.name + ' moved from ' @unit.node.name + ' to ' + @node.name
+	
     respond_to do |format|
       if @unit.node.linked_nodes.keep_if {|dest| dest.id == @node.id }.count > 0
         if @unit.update_attributes({ "node_id" => params[:node] })
-          format.html { redirect_to map_path, notice: 'Unit was successfully moved.' }
+          format.html { redirect_to map_path, notice: succ_notice }
           format.json { head :ok }
         else
-          format.html { redirect_to units_path }
+          format.html { redirect_to units_path, notice: fail_notice }
           format.json { render json: @unit.errors, status: :unprocessable_entity }
         end
 	  else
-	    format.html { redirect_to map_path,
-          notice: notice}
-		format.json { render json: notice,
-		  status: :unprocessable_entity }
+	    format.html { redirect_to map_path, notice: fail_notice}
+		format.json { render json: fail_notice, status: :unprocessable_entity }
 	  end
     end
 	
