@@ -8,7 +8,7 @@ class UnitsController < ApplicationController
     succ_notice = @unit.name + ' moved from ' + @unit.node.name + ' to ' + @node.name
 	
     respond_to do |format|
-      if @unit.node.linked_nodes.keep_if {|dest| dest.id == @node.id }.count > 0
+      if @unit.node.linked_nodes.keep_if {|dest| dest.id == @node.id }.any?
         if @unit.update_attributes({ "node_id" => params[:node] })
           format.html { redirect_to map_path, notice: succ_notice }
           format.json { head :ok }
