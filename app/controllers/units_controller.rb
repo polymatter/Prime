@@ -6,7 +6,7 @@ class UnitsController < ApplicationController
     @unit = Unit.find(params[:unit])
 	@node = Node.find(params[:node])
     fail_notice = @unit.name + ' can not move from ' + @unit.node.name + ' to ' + @node.name 
-    succ_notice = @unit.name + ' moved from ' @unit.node.name + ' to ' + @node.name
+    succ_notice = @unit.name + ' moved from ' + @unit.node.name + ' to ' + @node.name
 	
     respond_to do |format|
       if @unit.node.linked_nodes.keep_if {|dest| dest.id == @node.id }.count > 0
