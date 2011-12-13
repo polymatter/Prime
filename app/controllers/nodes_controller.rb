@@ -1,5 +1,6 @@
 class NodesController < ApplicationController
-  http_basic_authenticate_with :name => "god", :password => "god", :except => :index
+  # fails on heroku
+  # http_basic_authenticate_with :name => "god", :password => "god", :except => :index
 
   # GET /nodes
   # GET /nodes.json

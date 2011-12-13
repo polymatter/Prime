@@ -1,5 +1,6 @@
 class NodeLinksController < ApplicationController
-  http_basic_authenticate_with :name => "god", :password => "god", :except => :index
+  # fails on heroku
+  # http_basic_authenticate_with :name => "god", :password => "god", :except => :index
 
   # GET /node_links
   # GET /node_links.json
