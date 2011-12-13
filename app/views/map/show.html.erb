@@ -1,9 +1,11 @@
+<% radius = 20 # radius of towns %>
+
 <% @units.each do |unit| %>
   <div class='unit' id='unit_<%= unit.id %>'
     style="
 	  position: absolute;
-	  left: <%= unit.node.x - (20/2) %>px;
-	  top: <%= unit.node.y - (20/2) %>px;
+	  left: <%= unit.node.x - (radius/2) %>px;
+	  top: <%= unit.node.y - (radius/2) %>px;
 	  z-index: 2
     ">
   <img src='<%= image_path("#{unit.map_img}") %>' />
@@ -22,8 +24,8 @@
 
 <map name='mapper' id='mapper'>
 <% @nodes.each do |node| %>
-  <area shape='circle' coords='<%= node.x %>, <%= node.y %>, 20' 
-    href='unit_move/1/<%= node.id %>' />
+  <area shape='circle' coords='<%= node.x %>, <%= node.y %>, <%= radius %>' 
+    href='unit_move/<%= @current_unit.id %>/<%= node.id %>' />
 <% end %>
 </map>
 
