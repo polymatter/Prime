@@ -1,6 +1,5 @@
 class UnitsController < ApplicationController
-  # fails on heroku
-  # http_basic_authenticate_with :name => "god", :password => "god", :except => :index
+  http_basic_authenticate_with :name => "god", :password => "god", :except => :move
 
   def move
     @unit = Unit.find(params[:unit])
