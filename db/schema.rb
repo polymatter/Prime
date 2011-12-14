@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111209160438) do
+ActiveRecord::Schema.define(:version => 20111213183822) do
 
   create_table "node_links", :force => true do |t|
     t.integer  "node_id"
@@ -24,6 +24,14 @@ ActiveRecord::Schema.define(:version => 20111209160438) do
     t.string   "name"
     t.integer  "x"
     t.integer  "y"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "players", :force => true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -2,10 +2,15 @@ Prime::Application.routes.draw do
   resources :node_links
   resources :units
   resources :nodes
-
+  resources :players
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
+  match 'log_in' => 'sessions#new', :as => 'log_in'
+  match 'log_out' => 'sessions#destroy', :as => 'log_out'
+  match 'auth' => 'sessions#create', :as => 'auth'
+  match 'sign_up' => 'players#new', :as => 'sign_up'
   match 'map' => 'map#show', :as => 'map'
   match 'unit_move/:unit/:node' => 'units#move', :as => 'unit_move'
   
