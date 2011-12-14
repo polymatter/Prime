@@ -1,11 +1,13 @@
-<% radius = 20 # radius of towns %>
+<% radius = 20 # radius of clickable area around the centre of nodes %>
+<% map_offset_x = 20 # left margin of map %>
+<% map_offset_y = 40 # top margin of map %>
 
 <% @units.each do |unit| %>
   <div class='unit' id='unit_<%= unit.id %>'
     style="
 	  position: absolute;
-	  left: <%= unit.node.x - (radius/2) %>px;
-	  top: <%= unit.node.y - (radius/2) %>px;
+	  left: <%= unit.node.x + map_offset_x - (radius/2) %>px;
+	  top: <%= unit.node.y + map_offset_y - (radius/2) %>px;
 	  z-index: 2
     ">
   <img src='<%= image_path("#{unit.map_img}") %>' />
@@ -15,8 +17,8 @@
 <div class='map'
   style="
 	position: absolute;
-	left: 0px;
-	top: 0px;
+	left: <%= map_offset_x %>px;
+	top: <%= map_offset_y %>px;
 	z-index: 1
   ">
   <img src='<%= image_path("map.png") %>' usemap='#mapper' border='1' />
@@ -36,8 +38,11 @@
 	top: 400px;
 	z-index: 1
   ">
-  <p>Click on a node to move the selected unit there. Units can currently only move along nodes
-  defined in the <%= link_to "node_links table", node_links_path %></p>
+  <p>Click on a node to move the selected unit there. Units can only move along nodes
+  defined in the <%= link_to "node_links table", node_links_path %>. Note the links are
+  unidirectional, linking a node A with node B means a unit can travel from node A to
+  node B. But there needs to be another node from node B to node A to allow the unit to
+  travel back again</p>
 </div>
 
 <div
