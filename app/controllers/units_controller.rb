@@ -2,23 +2,27 @@ class UnitsController < ApplicationController
   http_basic_authenticate_with :name => "god", :password => "god", :except => :move
 
   def move
-    @unit = Unit.find(params[:unit])
+    @unit = current_player.units.find(params[:unit]) if current_player
 	@node = Node.find(params[:node])
-    fail_notice = @unit.name + ' can not move from ' + @unit.node.name + ' to ' + @node.name 
-    succ_notice = @unit.name + ' moved from ' + @unit.node.name + ' to ' + @node.name
+	
+	move_order = @unit.name + ' from ' + @unit.node.name + ' to ' + @node.name if @unit && @node
 	
     respond_to do |format|
-      if @unit.node.linked_nodes.keep_if {|dest| dest.id == @node.id }.any?
+	  if !(@unit && @node)
+	    # node :unit and :node must exist otherwise it would not route here
+	    format.html { redirect_to map_path, notice: 'Player probably does not have permission to move unit ' + params[:unit] + ' to node ' + params[:node]}
+	    format.json { render json: 'error', status: :unprocessable_entry }
+	  elsif @unit.node.linked_nodes.keep_if {|dest| dest.id == @node.id }.any?
         if @unit.update_attributes({ "node_id" => params[:node] })
-          format.html { redirect_to map_path, notice: succ_notice }
+          format.html { redirect_to map_path, notice: 'Moved ' + move_order }
           format.json { head :ok }
         else
-          format.html { redirect_to units_path, notice: fail_notice }
+          format.html { redirect_to map_path, notice: 'DB fail to save the move ' + move_order }
           format.json { render json: @unit.errors, status: :unprocessable_entity }
         end
 	  else
-	    format.html { redirect_to map_path, notice: fail_notice}
-		format.json { render json: fail_notice, status: :unprocessable_entity }
+	    format.html { redirect_to map_path, notice: 'No direct link between nodes to allow to move ' + move_order }
+		format.json { render json: @unit.errors, status: :unprocessable_entity }
 	  end
     end
 	

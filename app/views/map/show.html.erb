@@ -35,12 +35,16 @@
   <img src='<%= image_path("map.png") %>' usemap='#mapper' border='1' />
 </div>
 
+<% if current_player %>
+
 <map name='mapper' id='mapper'>
 <% @nodes.each do |node| %>
   <area shape='circle' coords='<%= node.x %>, <%= node.y %>, <%= radius %>' 
     href='unit_move/<%= @current_unit.id %>/<%= node.id %>' />
 <% end %>
 </map>
+
+<% end %>
 
 <div
   style="

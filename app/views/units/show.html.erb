@@ -17,6 +17,9 @@
   link = <%= link_to @unit.node.name, @unit.node %>
 </p>
 
-
+<p>
+  <b>Player:</b>
+  <%= @unit.player.name if @unit.player %>
+</p>
 <%= link_to 'Edit', edit_unit_path(@unit) %> |
 <%= link_to 'Back', units_path %>

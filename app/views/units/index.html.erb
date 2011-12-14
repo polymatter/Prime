@@ -2,11 +2,12 @@
 
 <table>
   <tr>
+    <th>Id</th>
     <th>Name</th>
     <th>Map img</th>
 	<th></th>
-    <th>Node id</th>
 	<th>Node</th>
+	<th>Player</th>
     <th></th>
     <th></th>
     <th></th>
@@ -14,11 +15,12 @@
 
 <% @units.each do |unit| %>
   <tr>
-    <td><%= unit.name %></td>
+    <td><%= unit.id %></td>
+    <td><%= link_to unit.name, unit %></td>
     <td><%= unit.map_img %></td>
 	<td><%= image_tag(unit.map_img) %></td>
-    <td><%= unit.node_id %></td>
-	<td><%= link_to unit.node.name, unit.node %></td>
+	<td><%= link_to (unit.node.id.to_s + ". " + unit.node.name), unit.node %></td>
+	<td><%= unit.player.name if unit.player %></td>
     <td><%= link_to 'Show', unit %></td>
     <td><%= link_to 'Edit', edit_unit_path(unit) %></td>
     <td><%= link_to 'Destroy', unit, confirm: 'Are you sure?', method: :delete %></td>

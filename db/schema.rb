@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111213183822) do
+ActiveRecord::Schema.define(:version => 20111214070737) do
 
   create_table "node_links", :force => true do |t|
     t.integer  "node_id"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20111213183822) do
     t.integer  "node_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "player_id"
   end
 
 end
