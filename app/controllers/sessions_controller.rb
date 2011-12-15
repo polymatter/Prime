@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     player = Player.find_by_email(params[:email])
     if player && player.authenticate(params[:password])
 	  session[:player_id] = player.id
-	  redirect_to map_path, :notice => "Logged in as " + @player.name
+	  redirect_to map_path, :notice => "Logged in as " + player.name
 	else
 	  flash.now.alert = "Invalid email or password"
 	  render "new"
