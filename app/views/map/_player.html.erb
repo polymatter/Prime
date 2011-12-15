@@ -1,0 +1,13 @@
+<div class='player' id='player'>
+<p>
+<% if current_player %>
+  logged in as <%= current_player.name %>
+  <%= link_to "Logout", log_out_path %>
+
+<% else %>
+  not logged in
+  <%= link_to "Login", log_in_path %>
+  <%= link_to "Sign up", sign_up_path %>
+<% end %>
+</p>
+</div>

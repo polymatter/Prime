@@ -1,0 +1,37 @@
+<!--- Place the unit banners on the map --->
+<% @units.each do |unit| %>
+  <div class='unit' id='unit_<%= unit.id %>'
+    style="
+	  position: absolute;
+	  left: <%= unit.node.x + map_offset_x - (radius/2) %>px;
+	  top: <%= unit.node.y + map_offset_y - (radius/2) %>px;
+	  z-index: 2
+    ">
+  <img src='<%= image_path("#{unit.map_img}") %>' />
+  </div>
+<% end %>
+
+<!---- Place the background map --->
+<div class='map'
+  style="
+	position: absolute;
+	left: <%= map_offset_x %>px;
+	top: <%= map_offset_y %>px;
+	z-index: 1
+  ">
+  <img src='<%= image_path("map.png") %>' 
+     <% if current_player %>usemap='#mapper'<% end %> 
+	 border='1' 
+  />
+</div>
+
+<% if current_player %>
+  <!-- consider making this static, since it is unlikely to change --> 
+  <map name='mapper' id='mapper'>
+    <% @nodes.each do |node| %>
+      <area shape='circle' coords='<%= node.x %>, <%= node.y %>, <%= radius %>' 
+        href='unit_move/<%= @current_unit.id %>/<%= node.id %>' />
+    <% end %>
+  </map>
+
+<% end %>

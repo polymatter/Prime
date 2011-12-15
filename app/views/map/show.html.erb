@@ -1,50 +1,10 @@
-<p>
-<% if current_player %>
-  logged in as <%= current_player.name %>
-  <%= link_to "Logout", log_out_path %>
-
-<% else %>
-  not logged in
-  <%= link_to "Login", log_in_path %>
-  <%= link_to "Sign up", sign_up_path %>
-<% end %>
-</p>
 <% radius = 20 # radius of clickable area around the centre of nodes %>
 <% map_offset_x = 20 # left margin of map %>
 <% map_offset_y = 40 # top margin of map %>
+<% locals = { :radius => radius, :map_offset_x => map_offset_x, :map_offset_y => map_offset_y }%>
 
-<% @units.each do |unit| %>
-  <div class='unit' id='unit_<%= unit.id %>'
-    style="
-	  position: absolute;
-	  left: <%= unit.node.x + map_offset_x - (radius/2) %>px;
-	  top: <%= unit.node.y + map_offset_y - (radius/2) %>px;
-	  z-index: 2
-    ">
-  <img src='<%= image_path("#{unit.map_img}") %>' />
-  </div>
-<% end %>
-
-<div class='map'
-  style="
-	position: absolute;
-	left: <%= map_offset_x %>px;
-	top: <%= map_offset_y %>px;
-	z-index: 1
-  ">
-  <img src='<%= image_path("map.png") %>' usemap='#mapper' border='1' />
-</div>
-
-<% if current_player %>
-
-<map name='mapper' id='mapper'>
-<% @nodes.each do |node| %>
-  <area shape='circle' coords='<%= node.x %>, <%= node.y %>, <%= radius %>' 
-    href='unit_move/<%= @current_unit.id %>/<%= node.id %>' />
-<% end %>
-</map>
-
-<% end %>
+<%= render 'player' %>
+<%= render :partial => 'map', :locals => locals %>
 
 <div
   style="
@@ -53,18 +13,21 @@
 	top: 400px;
 	z-index: 1
   ">
-  <p>Click on a node to move the selected unit there. Units can only move along nodes
-  defined in the <%= link_to "node_links table", node_links_path %>. Note the links are
-  unidirectional, linking a node A with node B means a unit can travel from node A to
-  node B. But there needs to be another link from node B to node A to allow the unit to
-  travel back again</p>
+  <p>Units can only be moved by the correct player. Login as user:red@red.com, pass:red 
+  to move the red marker. Login as user:blue@blue.com, pass:blue
+  to move the blue marker.
+  
+  Units can only move along nodes defined in the <%= link_to "node_links table", node_links_path %>. 
+  Note the links are unidirectional, linking a node A with node B means a unit can travel 
+  from node A to node B. But there needs to be another link from node B to node A to allow 
+  the unit to travel back again</p>
 </div>
 
 <div
   style="
     position: absolute;
-	left: 20px;
-	top: 455px;
+	left: 400px;
+	top: 0px;
 	z-index: 2
   ">
   <p id="notice"><%= notice %></p>
