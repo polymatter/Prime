@@ -2,7 +2,18 @@
 
 <ul>
   <li><%= link_to "View Map", map_path %></li>
+  <li><%= link_to "Login", log_in_path %></li>
+  <li><%= link_to "Signup", sign_up_path %></li>
+</ul>
+
+<h2>Admin options</h2>
+
+<p>username: the generic term for a powerful being
+<br />password: the reason for the beings power</p>
+
+<ul>
   <li><%= link_to "Read/Change the node table", nodes_path %> -> for when the map changes</li>
   <li><%= link_to "Read/Change the node links table", node_links_path %></li>
   <li><%= link_to "Read/Change the unit table", units_path %></li>
+  <li><%= link_to "Read the players table", players_path %></li>
 </ul>

@@ -1,0 +1,44 @@
+<h1>Listing Players</h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Email</th>
+	<th>Password Digest</th>
+	<th>Units</th>
+	<th></th>
+	<th></th>
+    <th></th>
+  </tr>
+
+<% @players.each do |player| %>
+  <tr>
+    <td><%= player.id %></td>
+    <td><%= player.name %></td>
+    <td><%= player.email %></td>
+	<td><%= player.password_digest %></td>
+	<td>
+	<% player.units.each do |unit| %>
+	<%=  link_to unit.name, unit %>
+	<% end %>
+	</td>
+	<td>[Reset password]</td>
+	<td><%= link_to 'Login', log_in_path %></td>
+    <td><%= link_to 'Destroy', player, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<p>Player passwords are stored encrypted in the database. 
+If a player forgets a password, there is no (easy) way of getting it out.
+Best option in that case is to reset it</p>
+
+<p>Admin can not currently login as any player. Instead, they can directly manipulate the world.
+Though a bit hackish, that is the best option to correct glitches, bugs and mistakes</p>
+
+<p>Deleting a player is permanent. There is no backup. No mercy. </p>
+
+<%= link_to 'New Player', new_player_path %>

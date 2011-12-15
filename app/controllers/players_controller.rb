@@ -11,4 +11,13 @@ class PlayersController < ApplicationController
 	  render "new"
 	end
   end
+  
+  def index
+    @players = Player.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @units }
+    end
+  end
 end
