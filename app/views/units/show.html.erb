@@ -18,6 +18,17 @@
 </p>
 
 <p>
+  <b>Node Link:</b>
+  <% if @unit.node_link.present? %>
+     id = <%= @unit.node_link.id %>, 
+	 from <%= link_to @unit.node_link.node.name, @unit.node_link.node %>
+	 to <%= link_to @unit.node_link.linked_node.name, @unit.node_link.linked_node %>
+  <% else %>
+    This unit is not travelling
+  <% end %>
+</p>
+
+<p>
   <b>Player:</b>
   <%= @unit.player.name if @unit.player %>
 </p>

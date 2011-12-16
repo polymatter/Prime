@@ -12,7 +12,7 @@ Prime::Application.routes.draw do
   match 'auth' => 'sessions#create', :as => 'auth'
   match 'sign_up' => 'players#new', :as => 'sign_up'
   match 'map' => 'map#show', :as => 'map'
-  match 'unit_move/:unit/:node' => 'units#move', :as => 'unit_move'
+  match 'unit_move/:unit/:nodelink' => 'units#move', :as => 'unit_move'
   
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

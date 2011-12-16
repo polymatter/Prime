@@ -21,10 +21,16 @@
   </div>
   <div class="field">
     <%= f.label :node_id %><br />
-    <%= f.number_field :node_id %>
+	<%= collection_select(:unit, :node_id, Node.all, :id, :id) %>
   </div>
   <div class="field">
+    <%= f.label :player_id %><br />
     <%= collection_select(:unit, :player_id, Player.all, :id, :name) %>
+  </div>
+  <div class="field">
+    <%= f.label :node_link_id %> <br />
+	<%= f.number_field :node_link_id %> <br />
+	Note, a link of 0 implies the unit is not planning to move
   </div>
   <div class="actions">
     <%= f.submit %>

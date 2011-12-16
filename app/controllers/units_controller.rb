@@ -3,17 +3,17 @@ class UnitsController < ApplicationController
 
   def move
     @unit = current_player.units.find(params[:unit]) if current_player
-	@node = Node.find(params[:node])
+	@nodelink = NodeLink.find(params[:nodelink])
 	
-	move_order = @unit.name + ' from ' + @unit.node.name + ' to ' + @node.name if @unit && @node
+	move_order = @unit.name + ' from ' + @nodelink.node.name + ' to ' + @nodelink.linked_node.name if @unit && @nodelink
 	
     respond_to do |format|
-	  if !(@unit && @node)
+	  if !(@unit && @nodelink)
 	    # node :unit and :node must exist otherwise it would not route here
-	    format.html { redirect_to map_path, notice: 'Player probably does not have permission to move unit ' + params[:unit] + ' to node ' + params[:node]}
+	    format.html { redirect_to map_path, notice: 'Player probably does not have permission to move unit (' + params[:unit] + ') along nodelink (' + params[:nodelink] + ')'}
 	    format.json { render json: 'error', status: :unprocessable_entry }
-	  elsif @unit.node.linked_nodes.keep_if {|dest| dest.id == @node.id }.any?
-        if @unit.update_attributes({ "node_id" => params[:node] })
+	  elsif @unit.node == @nodelink.node
+        if @unit.update_attributes({ "node_link_id" => @nodelink })
           format.html { redirect_to map_path, notice: 'Moved ' + move_order }
           format.json { head :ok }
         else
@@ -21,7 +21,7 @@ class UnitsController < ApplicationController
           format.json { render json: @unit.errors, status: :unprocessable_entity }
         end
 	  else
-	    format.html { redirect_to map_path, notice: 'No direct link between nodes to allow to move ' + move_order }
+	    format.html { redirect_to map_path, notice: 'No direct link between nodes to allow to move ' + move_order}
 		format.json { render json: @unit.errors, status: :unprocessable_entity }
 	  end
     end

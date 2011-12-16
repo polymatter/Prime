@@ -7,6 +7,7 @@
     <th>Map img</th>
 	<th></th>
 	<th>Node</th>
+	<th>Node Link</th>
 	<th>Player</th>
     <th></th>
     <th></th>
@@ -20,6 +21,10 @@
     <td><%= unit.map_img %></td>
 	<td><%= image_tag(unit.map_img) %></td>
 	<td><%= link_to (unit.node.id.to_s + ". " + unit.node.name), unit.node %></td>
+	<td>
+	<% if unit.node_link.present? %>
+	  <%= link_to unit.node_link.id, unit.node_link %>
+	<% else %> 0 <% end %></td>
 	<td><%= unit.player.name if unit.player %></td>
     <td><%= link_to 'Show', unit %></td>
     <td><%= link_to 'Edit', edit_unit_path(unit) %></td>

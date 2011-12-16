@@ -25,12 +25,11 @@
   />
 </div>
 
-<% if current_player %>
-  <!-- consider making this static, since it is unlikely to change --> 
+<% if current_player.present? %>
   <map name='mapper' id='mapper'>
-    <% @nodes.each do |node| %>
-      <area shape='circle' coords='<%= node.x %>, <%= node.y %>, <%= radius %>' 
-        href='unit_move/<%= @current_unit.id %>/<%= node.id %>' />
+    <% @nodelinks.each do |nodelink| %>
+      <area shape='circle' coords='<%= nodelink.linked_node.x %>, <%= nodelink.linked_node.y %>, <%= radius %>' 
+        href='unit_move/<%= @current_unit.id %>/<%= nodelink.id %>' />
     <% end %>
   </map>
 

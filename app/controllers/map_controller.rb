@@ -2,7 +2,10 @@ class MapController < ApplicationController
   def show
 	@nodes = Node.find(:all)
 	@units = Unit.find(:all)
-	@current_unit ||= current_player.units.first if current_player
+	if current_player 
+	  @current_unit = current_player.units.first
+	  @nodelinks = @current_unit.node.node_links
+	end
   end
 
 end

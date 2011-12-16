@@ -4,6 +4,7 @@
 
 <table>
   <tr>
+    <th>Id</th>
     <th>Node id</th>
 	<th>Node</th>
     <th>Linked node id</th>
@@ -15,6 +16,7 @@
 
 <% @node_links.each do |node_link| %>
   <tr>
+    <td><%= node_link.id %></td>
     <td><%= node_link.node_id %></td>
 	<td><%= link_to node_link.node.name, node_link.node %></td>
     <td><%= node_link.linked_node_id %></td>
