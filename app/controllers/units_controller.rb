@@ -5,7 +5,9 @@ class UnitsController < ApplicationController
     @unit = current_player.units.find(params[:unit]) if current_player
 	@nodelink = NodeLink.find(params[:nodelink])
 	
-	move_order = @unit.name + ' from ' + @nodelink.node.name + ' to ' + @nodelink.linked_node.name if @unit && @nodelink
+	if @unit && @nodelink
+	  move_order = @unit.name + ' will move from ' + @nodelink.node.name + ' to ' + @nodelink.linked_node.name
+	end
 	
     respond_to do |format|
 	  if !(@unit && @nodelink)
@@ -13,11 +15,11 @@ class UnitsController < ApplicationController
 	    format.html { redirect_to map_path, notice: 'Player probably does not have permission to move unit (' + params[:unit] + ') along nodelink (' + params[:nodelink] + ')'}
 	    format.json { render json: 'error', status: :unprocessable_entry }
 	  elsif @unit.node == @nodelink.node
-        if @unit.update_attributes({ "node_link_id" => @nodelink })
-          format.html { redirect_to map_path, notice: 'Moved ' + move_order }
+        if @unit.update_attributes({"node_link_id" => @nodelink.id })
+          format.html { redirect_to map_path, notice: 'Set order: ' + move_order }
           format.json { head :ok }
         else
-          format.html { redirect_to map_path, notice: 'DB fail to save the move ' + move_order }
+          format.html { redirect_to map_path, notice: 'DB fail to save the order: ' + move_order }
           format.json { render json: @unit.errors, status: :unprocessable_entity }
         end
 	  else
