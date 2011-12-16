@@ -14,6 +14,7 @@ Prime::Application.routes.draw do
   match 'map' => 'map#show', :as => 'map'
   match 'unit_move/:unit/:nodelink' => 'units#move', :as => 'unit_move'
   match 'unit_cancel_move/:unit' => 'units#cancel_move', :as => 'unit_cancel_move'
+  match 'test_turn' => 'units#turn', :as => 'test_turn'
   
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

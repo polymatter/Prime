@@ -1,6 +1,41 @@
 class UnitsController < ApplicationController
   http_basic_authenticate_with :name => "god", :password => "god", :except => :move
 
+  def turn
+    # unit_update is a hash of attributes to update in the unit model
+	# errors is a string of any encountered error messages
+	errors = ''
+	
+	Unit.all.each do |unit|
+	  unit_update = {}
+	
+	  # if unit has been ordered to move, then complete the move
+	  if unit.node_link
+	    unit_update[:node_id] = unit.node_link.linked_node.id
+        unit_update[:node_link_id] = 0	
+	  end
+	  
+	  #update the unit if it needs updating
+	  if unit_update
+	    if !unit.update_attributes(unit_update)
+		  errors = errors + unit.errors
+		end
+	  end
+	  
+	end
+	
+	respond_to do |format|
+	  if !errors.present?
+        format.html { redirect_to map_path, notice: 'Turn update complete' }
+        format.json { head :ok }
+      else
+        format.html { redirect_to map_path, notice: 'ERROR: ' + errors }
+		format.json { render json: 'ERROR: ' + errors, status: :unprocessable_entity }
+      end	  
+	end
+	
+  end
+  
   # having a seperate method for cancelling a move means:
   # 1. no need to sprinkle checks in move method for if node_link == 0 and is therefore an invalid nodelink
   # these checks are kind of strange since why are we setting to an invalid node_link? answer: to represent
