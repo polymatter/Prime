@@ -5,6 +5,7 @@
 
 <%= render 'player' %>
 <%= render :partial => 'map', :locals => locals %>
+<%= render :partial => 'unit_orders', :locals => { :current_unit => @current_unit } %>
 
 <div
   style="

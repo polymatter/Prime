@@ -1,0 +1,32 @@
+<div style="
+    position: absolute;
+	left: 1000px;
+	top: 20px;
+	z-index: 2
+  ">
+  <table>
+    <tr>
+	  <th></th>
+	  <th></th>
+	  <th></th>
+	  <th></th>
+	</tr>
+  <% @units.each do |unit| %>
+    <tr>
+      <td><%= image_tag(unit.map_img) %></td>
+	  <td><%= unit.name %></td>
+	  <td>
+	    <% if unit.node_link %>
+	      moving to <%= unit.node_link.linked_node.name %> from <%= unit.node_link.node.name %> 
+	    <% else %>
+	      at <%= unit.node.name %>
+	    <% end %>
+	  </td>
+	  <td>
+	    <% if unit == current_unit && unit.node_link %>
+		  <%= link_to "Cancel order", unit_cancel_move_path(unit) %>
+		<% end %>
+	  </td>
+  <% end %>
+  </table>
+</div>

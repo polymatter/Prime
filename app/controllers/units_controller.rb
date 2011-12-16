@@ -1,6 +1,30 @@
 class UnitsController < ApplicationController
   http_basic_authenticate_with :name => "god", :password => "god", :except => :move
 
+  # having a seperate method for cancelling a move means:
+  # 1. no need to sprinkle checks in move method for if node_link == 0 and is therefore an invalid nodelink
+  # these checks are kind of strange since why are we setting to an invalid node_link? answer: to represent
+  # a unit that is not moving. this is a different state transition and should be handled seperately
+  # 2. if decided later to have a boolean "travelling?" column or some other way of representing the unit
+  # not moving, then this way is easier to change since we can assume in move that only valid node_links are
+  # given and we can assume in cancel_move that we don't care about the node_link
+  def cancel_move
+    @unit = current_player.units.find(params[:unit]) if current_player
+	
+	respond_to do |format|
+	  if !@unit.present?
+	     format.html { redirect_to map_path, notice: 'Player probable does not have permission to cancel the move order' }
+         format.json { render json: 'permission denied', status: :unprocessable_entry }
+	  elsif @unit.update_attributes({:node_link_id => 0})
+        format.html { redirect_to map_path, notice: @unit.name + ' will stay at present location' }
+        format.json { head :ok }
+      else	  
+        format.html { redirect_to map_path, notice: 'Database error, maybe node_link_id has been linked with node_links in the database?' }
+        format.json { render json: @unit.errors, status: :unprocessable_entity }	  
+	  end
+	end
+  end
+  
   def move
     @unit = current_player.units.find(params[:unit]) if current_player
 	@nodelink = NodeLink.find(params[:nodelink])
@@ -13,7 +37,7 @@ class UnitsController < ApplicationController
 	  if !(@unit && @nodelink)
 	    # node :unit and :node must exist otherwise it would not route here
 	    format.html { redirect_to map_path, notice: 'Player probably does not have permission to move unit (' + params[:unit] + ') along nodelink (' + params[:nodelink] + ')'}
-	    format.json { render json: 'error', status: :unprocessable_entry }
+	    format.json { render json: 'permission denied', status: :unprocessable_entry }
 	  elsif @unit.node == @nodelink.node
         if @unit.update_attributes({:node_link_id => @nodelink.id })
           format.html { redirect_to map_path, notice: 'Set order: ' + move_order }
