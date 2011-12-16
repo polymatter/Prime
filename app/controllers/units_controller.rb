@@ -15,7 +15,7 @@ class UnitsController < ApplicationController
 	    format.html { redirect_to map_path, notice: 'Player probably does not have permission to move unit (' + params[:unit] + ') along nodelink (' + params[:nodelink] + ')'}
 	    format.json { render json: 'error', status: :unprocessable_entry }
 	  elsif @unit.node == @nodelink.node
-        if @unit.update_attributes({"node_link_id" => @nodelink.id })
+        if @unit.update_attributes({:node_link_id => @nodelink.id })
           format.html { redirect_to map_path, notice: 'Set order: ' + move_order }
           format.json { head :ok }
         else
