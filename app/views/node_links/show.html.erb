@@ -2,14 +2,16 @@
 
 <p>
   <b>Node:</b>
-  <%= @node_link.node_id %>
+  id = <%= @node_link.node_id %><br />
+  node = <%= link_to @node_link.node.name, @node_link.node %>
 </p>
 
 <p>
   <b>Linked node:</b>
-  <%= @node_link.linked_node_id %>
+  id = <%= @node_link.linked_node_id %><br />
+  node = <%= link_to @node_link.linked_node.name, @node_link.linked_node %>
 </p>
 
 
 <%= link_to 'Edit', edit_node_link_path(@node_link) %> |
-<%= link_to 'Back', node_links_path %>
+<%= link_to 'Listing', node_links_path %>
