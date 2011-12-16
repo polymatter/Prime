@@ -1,3 +1,13 @@
+<% magic_display_tweek = radius*-0.75 #### <-- needs investigating! %>
+<% offset_x = map_offset_x + magic_display_tweek %>
+<% offset_y = map_offset_y + magic_display_tweek %>
+
+<!--- 
+ z-index: 1 ......... map background
+ z-index: 2 ......... selectable picture
+ z-index: 3 ......... unit icons
+-->
+
 <!--- Place the unit banners on the map --->
 <% @units.each do |unit| %>
   <div class='unit' id='unit_<%= unit.id %>'
@@ -5,9 +15,13 @@
 	  position: absolute;
 	  left: <%= unit.node.x + map_offset_x - (radius/2) %>px;
 	  top: <%= unit.node.y + map_offset_y - (radius/2) %>px;
-	  z-index: 2
+	  z-index: 3
     ">
-  <img src='<%= image_path("#{unit.map_img}") %>' />
+  <% if unit != current_unit %>
+    <img src='<%= image_path("#{unit.map_img}") %>' /> 
+  <% else %> 
+    <img src='<%= image_path("#{unit.map_img}") %>' class='currentunit' />
+  <% end %>
   </div>
 <% end %>
 
@@ -19,18 +33,22 @@
 	top: <%= map_offset_y %>px;
 	z-index: 1
   ">
-  <img src='<%= image_path("map.png") %>' 
-     <% if current_player %>usemap='#mapper'<% end %> 
-	 border='1' 
-  />
+  <img src='<%= image_path("map.png") %>' border='1' />
 </div>
 
 <% if current_player.present? %>
-  <map name='mapper' id='mapper'>
-    <% @nodelinks.each do |nodelink| %>
-      <area shape='circle' coords='<%= nodelink.linked_node.x %>, <%= nodelink.linked_node.y %>, <%= radius %>' 
-        href='unit_move/<%= @current_unit.id %>/<%= nodelink.id %>' />
-    <% end %>
-  </map>
+  <% @nodelinks.each do |nodelink| %>
+     <div class='reachablenode'
+	 style="
+	   position: absolute;
+	   left: <%= nodelink.linked_node.x + offset_x %>px;
+	   top: <%= nodelink.linked_node.y + offset_y %>px;
+	   z-index: 2
+	 ">
+	    <a href='unit_move/<%= @current_unit.id %>/<%= nodelink.id %>'>
+	      <img src='<%= image_path("node_green_reachable.png") %>' />
+		</a>
+	 </div>
+  <% end %>
 
 <% end %>

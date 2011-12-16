@@ -1,7 +1,7 @@
 <% radius = 20 # radius of clickable area around the centre of nodes %>
 <% map_offset_x = 20 # left margin of map %>
 <% map_offset_y = 40 # top margin of map %>
-<% locals = { :radius => radius, :map_offset_x => map_offset_x, :map_offset_y => map_offset_y }%>
+<% locals = { :current_unit => @current_unit, :radius => radius, :map_offset_x => map_offset_x, :map_offset_y => map_offset_y }%>
 
 <%= render 'player' %>
 <%= render :partial => 'map', :locals => locals %>
@@ -13,14 +13,23 @@
 	top: 400px;
 	z-index: 1
   ">
-  <p>Units can only be moved by the correct player. Login as user:red@red.com, pass:red 
-  to move the red marker. Login as user:blue@blue.com, pass:blue
-  to move the blue marker.
-  
-  Units can only move along nodes defined in the <%= link_to "node_links table", node_links_path %>. 
-  Note the links are unidirectional, linking a node A with node B means a unit can travel 
-  from node A to node B. But there needs to be another link from node B to node A to allow 
-  the unit to travel back again</p>
+  <p>Units can only be moved by the correct player. <br />Login as user:red@red.com, pass:red 
+  to move the red marker. <br />Login as user:blue@blue.com, pass:blue
+  to move the blue marker. <br />
+  </p>
+  <p>Can only click on nodes that are valid paths. If you are logged in, the current unit should be
+  highlighted. The unit can only travel along the node links.
+  </p>
+  <p>
+  I am using a single image to display the map. 
+  This seems the most easy and efficient way of displaying the map 
+   ** only a single HTTP request which can be cached easily **, this is signficiant as we're looking at
+   maps with many more nodes than we have here so we could be looking at saving ~100 HTTP requests
+   saving server time and speeding everything up <br/> 
+   also fewer chance of scaling issues, 
+   easy to edit, 
+   can have polygon shaped clickable areas)   
+  </p>
 </div>
 
 <div
