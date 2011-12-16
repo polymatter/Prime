@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @node_type.name %>
+</p>
+
+<p>
+  <b>Reachable img:</b>
+  <%= @node_type.reachable_img %>
+</p>
+
+
+<%= link_to 'Edit', edit_node_type_path(@node_type) %> |
+<%= link_to 'Back', node_types_path %>

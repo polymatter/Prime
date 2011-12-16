@@ -15,18 +15,33 @@
   <%= @node.y %>
 </p>
 
+<p>
+  <b>Type:</b>
+  <%= @node.node_type.name if @node.node_type %>
+</p>
+
+<h3>Units here</h3>
+
+<% @node.units do |unit| %>
+  <%= link_to unit.name, unit %>, 
+<% end %>
+
+<% if @node.units.empty? %>None<% end %>
+
 <h3>From Here, Units can travel to: </h3>
 
 <% @node.linked_nodes.each do |linked_node| %>
-  <p><%= link_to linked_node.name, linked_node %></p>
+  <%= link_to linked_node.name, linked_node %><br />
 <% end %>
 
 <h3>Units can get here from: </h3>
 
 <!--- [HACK] warning this is bad. Look at node controller -->
 <% @inverse_linked_nodes.each do |node_linked| %>
-  <p><%= link_to node_linked.node.name, node_linked.node %></p>
+  <%= link_to node_linked.node.name, node_linked.node %><br />
 <% end %>
+
+<p></p>
 
 <%= link_to 'Edit', edit_node_path(@node) %> |
 <%= link_to 'Back', nodes_path %>

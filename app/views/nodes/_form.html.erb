@@ -23,6 +23,10 @@
     <%= f.label :y %><br />
     <%= f.number_field :y %>
   </div>
+  <div class="field">
+    <%= f.label :node_type_id %><br />
+    <%= f.collection_select(:node_type_id, NodeType.all, :id, :name) %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

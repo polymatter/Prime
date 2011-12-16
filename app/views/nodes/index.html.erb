@@ -2,9 +2,11 @@
 
 <table border='1'>
   <tr>
+    <th>Id</th>
     <th>Name</th>
     <th>X</th>
     <th>Y</th>
+	<th>Type</th>
     <th></th>
     <th></th>
     <th></th>
@@ -12,9 +14,11 @@
 
 <% @nodes.each do |node| %>
   <tr>
+    <td><%= node.id %></td>
     <td><%= node.name %></td>
     <td><%= node.x %></td>
     <td><%= node.y %></td>
+	<td><%= node.node_type.name if node.node_type %></td>
     <td><%= link_to 'Show', node %></td>
     <td><%= link_to 'Edit', edit_node_path(node) %></td>
     <td><%= link_to 'Destroy', node, confirm: 'Are you sure?', method: :delete %></td>
