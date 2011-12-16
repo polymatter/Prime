@@ -1,5 +1,5 @@
 class UnitsController < ApplicationController
-  http_basic_authenticate_with :name => "god", :password => "god", :except => :move
+  http_basic_authenticate_with :name => "god", :password => "god", :except => [ :move, :cancel_move ]
 
   def turn
     # unit_update is a hash of attributes to update in the unit model
@@ -18,7 +18,7 @@ class UnitsController < ApplicationController
 	  #update the unit if it needs updating
 	  if unit_update
 	    if !unit.update_attributes(unit_update)
-		  errors = errors + unit.errors
+		  errors = errors ? errors + "\n<br/>" + unit.errors : unit.errors
 		end
 	  end
 	  
