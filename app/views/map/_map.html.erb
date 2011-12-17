@@ -33,7 +33,7 @@
 	top: <%= map_offset_y %>px;
 	z-index: 1
   ">
-  <img src='<%= image_path("map.png") %>' border='1' />
+  <img src='<%= image_path(:"map.png") %>' border='1' />
 </div>
 
 <% if current_player.present? %>
@@ -46,7 +46,7 @@
 	   z-index: 2
 	 ">
 	    <a href='unit_move/<%= @current_unit.id %>/<%= nodelink.id %>'>
-	      <img src='<%= image_path("node_green_reachable.png") %>' />
+	      <img src='<%= image_path(nodelink.linked_node.node_type.reachable_img) %>' />
 		</a>
 	 </div>
   <% end %>
