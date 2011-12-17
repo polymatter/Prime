@@ -39,7 +39,7 @@
   <% text_x = 20 %>
   <% text_y = 0 %>
   <% @nodes.each do |node| %>
-    <div class='node_<%= node.node_type.name %>_text' id='node<%= node.id %>' 
+    <div class='strength_<%= node.node_type.name %>_text' id='node<%= node.id %>' 
 	style="
 	  position: absolute;
 	  left: <%= node.x + text_x %>px;

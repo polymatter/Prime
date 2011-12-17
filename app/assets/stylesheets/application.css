@@ -10,25 +10,25 @@ img.currentunit
   border:3px solid yellow;
 }
 
-div.node_red_text
+div.strength_red_text
 {
   background-color:#ffaaaa;
   width: 20px;
 }
 
-div.node_blue_text 
+div.strength_blue_text 
 {
   background-color:#aaaaff;
   width: 20px;
 }
 
-div.node_green_text
+div.strength_green_text
 {
   background-color:#aaffaa;
   width: 20px;
 }
 
-div.node_white_text
+div.strength_white_text
 {
   background-color:#aaaaaa;
   width: 20px;
