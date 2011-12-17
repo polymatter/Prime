@@ -9,6 +9,7 @@
     <th>X</th>
     <th>Y</th>
 	<th>Node Type</th>
+	<th>Strength</th>
     <th></th>
     <th></th>
     <th></th>
@@ -21,6 +22,7 @@
     <td><%= node.x %></td>
     <td><%= node.y %></td>
 	<td><%= link_to node.node_type.name, node.node_type %></td>
+	<td><%= node.strength %></td>
     <td><%= link_to 'Show', node %></td>
     <td><%= link_to 'Edit', edit_node_path(node) %></td>
     <td><%= link_to 'Destroy', node, confirm: 'Are you sure?', method: :delete %></td>

@@ -13,17 +13,23 @@ img.currentunit
 div.node_red_text
 {
   background-color:#ffaaaa;
-  width: 50px;
+  width: 20px;
 }
 
 div.node_blue_text 
 {
   background-color:#aaaaff;
-  width: 50px;
+  width: 20px;
 }
 
 div.node_green_text
 {
   background-color:#aaffaa;
-  width: 50px;
+  width: 20px;
+}
+
+div.node_white_text
+{
+  background-color:#aaaaaa;
+  width: 20px;
 }

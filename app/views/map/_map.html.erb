@@ -34,6 +34,7 @@
 	z-index: 1
   ">
   <img src='<%= image_path(:"map.png") %>' border='1' />
+  
   <!--- Place the text next to the node --->
   <% text_x = 20 %>
   <% text_y = 0 %>
@@ -45,7 +46,7 @@
 	  top: <%= node.y + text_y %>px;
 	  z-index: 2
 	">
-	  <%= node.name %>
+	  <%= node.strength %>
 	</div>
   <% end%>
 </div>

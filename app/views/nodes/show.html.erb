@@ -20,6 +20,11 @@
   <%= @node.node_type.name if @node.node_type %>
 </p>
 
+<p>
+  <b>Strength:</b>
+  <%= @node.strength %>
+</p>
+
 <h3>Units here</h3>
 
 <% @node.units do |unit| %>
