@@ -1,7 +1,8 @@
 <h1>Listing node_types</h1>
 
-<table>
+<table border=1>
   <tr>
+    <th>Id</th>
     <th>Name</th>
     <th>Reachable img</th>
     <th></th>
@@ -11,8 +12,9 @@
 
 <% @node_types.each do |node_type| %>
   <tr>
+    <td><%= node_type.id %></td>
     <td><%= node_type.name %></td>
-    <td><%= node_type.reachable_img %></td>
+    <td><%= image_tag(node_type.reachable_img) %><%= node_type.reachable_img %></td>
     <td><%= link_to 'Show', node_type %></td>
     <td><%= link_to 'Edit', edit_node_type_path(node_type) %></td>
     <td><%= link_to 'Destroy', node_type, confirm: 'Are you sure?', method: :delete %></td>

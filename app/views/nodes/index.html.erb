@@ -1,12 +1,14 @@
 <h1>Listing nodes</h1>
 
+<%= image_tag(:'map.png') %>
+
 <table border='1'>
   <tr>
     <th>Id</th>
     <th>Name</th>
     <th>X</th>
     <th>Y</th>
-	<th>Type</th>
+	<th>Node Type</th>
     <th></th>
     <th></th>
     <th></th>
@@ -18,7 +20,7 @@
     <td><%= node.name %></td>
     <td><%= node.x %></td>
     <td><%= node.y %></td>
-	<td><%= node.node_type.name if node.node_type %></td>
+	<td><%= link_to node.node_type.name, node.node_type %></td>
     <td><%= link_to 'Show', node %></td>
     <td><%= link_to 'Edit', edit_node_path(node) %></td>
     <td><%= link_to 'Destroy', node, confirm: 'Are you sure?', method: :delete %></td>

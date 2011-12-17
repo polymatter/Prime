@@ -1,3 +1,5 @@
+<%= image_tag(:"map.png") %>
+
 <%= form_for(@node_link) do |f| %>
   <% if @node_link.errors.any? %>
     <div id="error_explanation">
@@ -13,11 +15,11 @@
 
   <div class="field">
     <%= f.label :node_id %><br />
-    <%= f.number_field :node_id %>
+    <%= f.collection_select(:node_id, Node.all, :id, :name) %>
   </div>
   <div class="field">
     <%= f.label :linked_node_id %><br />
-    <%= f.number_field :linked_node_id %>
+    <%= f.collection_select(:linked_node_id, Node.all, :id, :name) %>
   </div>
   <div class="actions">
     <%= f.submit %>
