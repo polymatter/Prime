@@ -10,6 +10,9 @@
 	  <th></th>
 	  <th></th>
 	  <th></th>
+	  <th></th>
+	  <th></th>
+	  <th></th>
 	</tr>
   <% @units.each do |unit| %>
     <tr>
@@ -27,6 +30,9 @@
 		  <%= link_to "Cancel order", unit_cancel_move_path(unit) %>
 		<% end %>
 	  </td>
+	  <td><div class='strength_red_text'>  <%= unit.red   %></div></td>
+	  <td><div class='strength_blue_text'> <%= unit.blue  %></div></td>
+	  <td><div class='strength_green_text'><%= unit.green %></div></td>
   <% end %>
   </table>
 </div>
