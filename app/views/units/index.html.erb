@@ -8,6 +8,9 @@
 	<th></th>
 	<th>Node</th>
 	<th>Node Link</th>
+	<th>Red</th>
+	<th>Blue</th>
+	<th>Green</th>
 	<th>Player</th>
     <th></th>
     <th></th>
@@ -25,6 +28,9 @@
 	<% if unit.node_link.present? %>
 	  <%= link_to unit.node_link.id, unit.node_link %>
 	<% else %> 0 <% end %></td>
+	<td><%= unit.red %></td>
+	<td><%= unit.blue %></td>
+	<td><%= unit.green %></td>
 	<td><%= unit.player.name if unit.player %></td>
     <td><%= link_to 'Show', unit %></td>
     <td><%= link_to 'Edit', edit_unit_path(unit) %></td>

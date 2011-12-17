@@ -9,6 +9,8 @@
 -->
 
 <!--- Place the unit banners on the map --->
+<% unit_text_x = 0 - (radius/2) %>
+<% unit_text_y = 20 %>
 <% @units.each do |unit| %>
   <div class='unit' id='unit_<%= unit.id %>'
     style="
@@ -22,6 +24,17 @@
   <% else %> 
     <img src='<%= image_path("#{unit.map_img}") %>' class='currentunit' />
   <% end %>
+  </div>
+  
+  <!--- Place the text of the units strongest colour underneath --->
+  <div class='strength_<%= unit.strongest %>_text'
+  style="
+    position: absolute;
+	left: <%= map_offset_x + unit.node.x + unit_text_x %>px;
+	top:  <%= map_offset_y + unit.node.y + unit_text_y %>px;
+	z-index: 4
+  ">
+  <%= unit[unit.strongest] %>
   </div>
 <% end %>
 
