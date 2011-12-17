@@ -7,5 +7,23 @@
 */
 img.currentunit
 {
-border:3px solid yellow;
+  border:3px solid yellow;
+}
+
+div.node_red_text
+{
+  background-color:#ffaaaa;
+  width: 50px;
+}
+
+div.node_blue_text 
+{
+  background-color:#aaaaff;
+  width: 50px;
+}
+
+div.node_green_text
+{
+  background-color:#aaffaa;
+  width: 50px;
 }
