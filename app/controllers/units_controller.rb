@@ -9,14 +9,14 @@ class UnitsController < ApplicationController
 	Node.all.each do |node|
 	  if !node.human_units.empty? && !node.passable_to_humans?
 	    node.human_units.each do |human_unit| 
-		  human_unit.human_fight_node(node) if !node.passable_to_humans?
+		  notices += "\n" + node.fight_human(human_unit) if !node.passable_to_humans?
 		end
 	  elsif !node.computer_units.empty? && !node.passable_to_computers?
 	    node.computer_units.each do |computer_unit|
 		  notices += "\n" + node.fight_computer(computer_unit) if !node.passable_to_computers?
 		end
 	  else
-	    notices += "\nNo battles at " + node.name
+	    nil
 	  end
 	end
 	
