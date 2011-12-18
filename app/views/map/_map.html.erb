@@ -4,8 +4,10 @@
 
 <!--- 
  z-index: 1 ......... map background
- z-index: 2 ......... selectable picture
- z-index: 3 ......... unit icons
+ z-index: 2 ......... white nodes
+ z-index: 3 ......... selectable picture
+ z-index: 4 ......... unit icons
+ z-index: 5 ......... strength markers
 -->
 
 <!--- Place the unit banners on the map --->
@@ -17,7 +19,7 @@
 	  position: absolute;
 	  left: <%= unit.node.x + map_offset_x - (radius/2) %>px;
 	  top: <%= unit.node.y + map_offset_y - (radius/2) %>px;
-	  z-index: 3
+	  z-index: 4
     ">
   <% if unit != current_unit %>
     <img src='<%= image_path("#{unit.map_img}") %>' /> 
@@ -32,7 +34,7 @@
     position: absolute;
 	left: <%= map_offset_x + unit.node.x + unit_text_x %>px;
 	top:  <%= map_offset_y + unit.node.y + unit_text_y %>px;
-	z-index: 4
+	z-index: 5
   ">
   <%= unit[unit.strongest] %>
   </div>
@@ -48,7 +50,7 @@
   ">
   <img src='<%= image_path(:"map.png") %>' border='1' />
   
-  <!--- Place the text next to the node --->
+  <!--- Place the text next to the node & show white nodes --->
   <% text_x = 20 %>
   <% text_y = 0 %>
   <% @nodes.each do |node| %>
@@ -57,10 +59,22 @@
 	  position: absolute;
 	  left: <%= node.x + text_x %>px;
 	  top: <%= node.y + text_y %>px;
-	  z-index: 2
+	  z-index: 5
 	">
 	  <%= node.strength %>
 	</div>
+	
+	<% if node.node_type.name == "white" %>
+	  <div
+	  style="
+	    position: absolute;
+	    left: <%= node.x - 15 %>px;
+	    top: <%= node.y - 15 %>px;
+	    z-index: 2
+	  ">
+	    <%= image_tag(:"node_white.png") %>
+	  </div>
+	<% end %>
   <% end%>
 </div>
 
