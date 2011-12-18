@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111217182646) do
+ActiveRecord::Schema.define(:version => 20111217221150) do
 
   create_table "node_links", :force => true do |t|
     t.integer  "node_id"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20111217182646) do
     t.string   "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_human"
   end
 
   create_table "unit_stats", :force => true do |t|

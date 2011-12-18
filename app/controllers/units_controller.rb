@@ -2,36 +2,27 @@ class UnitsController < ApplicationController
   http_basic_authenticate_with :name => "god", :password => "god", :except => [ :move, :cancel_move ]
 
   def turn
-    # unit_update is a hash of attributes to update in the unit model
-	# errors is a string of any encountered error messages
-	errors = ''
+	notices = ''
 	
-	Unit.all.each do |unit|
-	  unit_update = {}
+	Unit.all.each { |unit| unit.move }
 	
-	  # if unit has been ordered to move, then complete the move
-	  if unit.node_link
-	    unit_update[:node_id] = unit.node_link.linked_node.id
-        unit_update[:node_link_id] = 0	
-	  end
-	  
-	  #update the unit if it needs updating
-	  if unit_update
-	    if !unit.update_attributes(unit_update)
-		  errors = errors ? errors + "\n<br/>" + unit.errors : unit.errors
+	Node.all.each do |node|
+	  if !node.human_units.empty? && !node.passable_to_humans?
+	    node.human_units.each do |human_unit| 
+		  human_unit.human_fight_node(node) if !node.passable_to_humans?
 		end
+	  elsif !node.computer_units.empty? && !node.passable_to_computers?
+	    node.computer_units.each do |computer_unit|
+		  notices += "\n" + node.fight_computer(computer_unit) if !node.passable_to_computers?
+		end
+	  else
+	    notices += "\nNo battles at " + node.name
 	  end
-	  
 	end
 	
 	respond_to do |format|
-	  if !errors.present?
-        format.html { redirect_to map_path, notice: 'Turn update complete' }
-        format.json { head :ok }
-      else
-        format.html { redirect_to map_path, notice: 'ERROR: ' + errors }
-		format.json { render json: 'ERROR: ' + errors, status: :unprocessable_entity }
-      end	  
+      format.html { redirect_to map_path, notice: notices + 'Turn update complete' }
+      format.json { head :ok }
 	end
 	
   end
