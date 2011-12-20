@@ -4,21 +4,54 @@ class UnitsController < ApplicationController
   def turn
 	notices = ''
 	
-	Unit.all.each { |unit| unit.move }
-	
-	Node.all.each do |node|
-	  if !node.human_units.empty? && !node.passable_to_humans?
-	    node.human_units.each do |human_unit| 
-		  notices += "\n" + node.fight_human(human_unit) if !node.passable_to_humans?
-		end
-	  elsif !node.computer_units.empty? && !node.passable_to_computers?
-	    node.computer_units.each do |computer_unit|
-		  notices += "\n" + node.fight_computer(computer_unit) if !node.passable_to_computers?
-		end
-	  else
-	    nil
-	  end
+	#any moving units reach their destination.
+	#we do not set them to stationary yet though, just in case they retreat
+	Unit.all.select { |unit| unit.moving? }.each do |unit| 
+	  unit.update_attributes({:node_id => unit.destination.id}) if unit
 	end
+	
+	# resolve all conflict at each node
+    Node.all.each do |node|
+	  # if there are both human and computer units at this node, then resolve their fight
+	  if node.has_human_units && node.has_computer_units
+	    battles = node.human_units.zip(node.computer_units)
+		# battles is a pairing of human units and computer units. 
+		# this way each human or computer unit will only fight a battle against another unit once.
+		# eg battles = [[human_unit, computer_unit],[human_unit, computer_unit], [human_unit, nil]]
+        battles.each do |battle|
+		  human_unit    = battle[0]
+		  computer_unit = battle[1]
+		  
+		  # there is no battle if either unit is nil
+		  if human_unit && computer_unit
+		  
+		    attacker = node.is_enemy(human_unit) ? human_unit    : computer_unit
+		    defender = node.is_enemy(human_unit) ? computer_unit : human_unit
+		  
+		    # resolve the fight
+		    battle_report = attacker.attack(defender)
+		    # display notices
+		    notices += battle_report[:message]
+		  end
+		end
+	  end
+	  
+	  # if after unit battles, there are enemy units on this node, resolve fighting these enemy units
+	  if node.has_friendly_units
+	    node.enemy_units.each {|unit| unit.retreat }
+	  else
+	    node_captured = false
+	    node.enemy_units.each do |unit|
+	      if !node_captured
+		    node.fight_unit(unit)
+		  end
+	    end
+	  end
+	  
+	end
+	
+	#make all units stationary
+	Unit.all.each { |unit| unit.update_attributes({ :node_link_id => 0}) }
 	
 	respond_to do |format|
       format.html { redirect_to map_path, notice: notices + 'Turn update complete' }
