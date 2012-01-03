@@ -40,7 +40,7 @@ class Node < ActiveRecord::Base
     else   
 	  msg = "#{name} repels invasion from #{unit.name}, by a margin of #{margin}"
 	  unit.log('player_invade_fail',msg)
-	  unit.move_message('respawn', 1)
+	  unit.move_message(1, 'respawns at')
 	  self.update_attributes ({:strength => strength - unit_strength })
     end  
   end
@@ -54,6 +54,7 @@ class Node < ActiveRecord::Base
 	  msg = "#{name} repels attack from #{unit.name}, by a margin of #{margin}"
 	  unit.log('computer_invade_fail',msg)
 	  update_attributes({:strength => strength - unit_strength })
+	  # computer unit does not respawn when invasion fails
 	else
 	  msg = "#{name} fell to attack from #{unit.name}, by a margin of #{margin}"
 	  unit.log('computer_invade_win',msg)
