@@ -27,14 +27,15 @@ class Node < ActiveRecord::Base
   end
   
   def fight_human(unit)
+    # human units must use the attack type that the node uses
     unit_strength = unit[node_type.name]
 	margin = unit_strength - self.strength
 	
-	# if unit wins, node changes colour and its strength is restored	
+	# if unit wins, node changes alligance and its strength is restored	
 	if margin > 0
 	  msg = "#{name} falls to invasion from #{unit.name}, by a margin of #{margin}"
 	  unit.log('player_invade_win',msg)
-	  self.update_attributes ({:node_type_id => 1, :strength => 99 })
+	  self.update_attributes ({:is_human => true, :strength => 99 })
 	#if unit loses fight, respawn at starting node
     else   
 	  msg = "#{name} repels invasion from #{unit.name}, by a margin of #{margin}"
@@ -45,6 +46,7 @@ class Node < ActiveRecord::Base
   end
   
   def fight_computer(unit)
+    # computer unit always fights with their strongest attack
     unit_strength = unit[unit.strongest]
 	margin = unit_strength - self.strength 
 	
@@ -55,7 +57,7 @@ class Node < ActiveRecord::Base
 	else
 	  msg = "#{name} fell to attack from #{unit.name}, by a margin of #{margin}"
 	  unit.log('computer_invade_win',msg)
-	  update_attributes({:node_type_id => 2, :strength => 10 })
+	  update_attributes({:is_human => false, :strength => 99 })
 	end
 	
   end
@@ -93,7 +95,7 @@ class Node < ActiveRecord::Base
   end
   
   def passable_to_humans
-    return node_type.name == "white"
+    is_human
   end
   
   def passable_to_computers?
@@ -101,6 +103,6 @@ class Node < ActiveRecord::Base
   end
   
   def passable_to_computers
-    return node_type.name != "white"
+    !is_human
   end
 end

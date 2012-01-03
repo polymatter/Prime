@@ -7,7 +7,7 @@
 
 <!--- 
  z-index: 1 ......... map background
- z-index: 2 ......... white nodes
+ z-index: 2 ......... player nodes
  z-index: 3 ......... selectable picture
  z-index: 4 ......... unit icons
  z-index: 5 ......... strength markers
@@ -67,7 +67,7 @@
 	  <%= node.strength %>
 	</div>
 	
-	<% if node.node_type.name == "white" %>
+	<% if node.is_human %>
 	  <div
 	  style="
 	    position: absolute;
