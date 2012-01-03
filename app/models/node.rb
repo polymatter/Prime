@@ -27,19 +27,7 @@ class Node < ActiveRecord::Base
   end
   
   def fight_human(unit)
-	unit_strength = 0
-	
-	if    node_type.name == "red"
-	  unit_strength = unit.red
-	elsif node_type.name == "blue"
-	  unit_strength = unit.blue
-	elsif node_type.name == "green"
-	  unit_strength = unit.green
-	else
-	  unit_strength = 0
-	end
-    # TEST: doesn't this mean, unit_strength = unit[node_type.name] ???
-	
+    unit_strength = unit[node_type.name]
 	margin = unit_strength - self.strength
 	
 	# if unit wins, node changes colour and its strength is restored	
@@ -51,7 +39,7 @@ class Node < ActiveRecord::Base
     else   
 	  msg = "#{name} repels invasion from #{unit.name}, by a margin of #{margin}"
 	  unit.log('player_invade_fail',msg)
-	  unit.update_attributes ({:node_id => 1})
+	  unit.move_message('respawn', 1)
 	  self.update_attributes ({:strength => strength - unit_strength })
     end  
   end
