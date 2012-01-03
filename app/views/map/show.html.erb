@@ -1,49 +1,34 @@
-<% radius = 20 # radius of clickable area around the centre of nodes %>
-<% map_offset_x = 20 # left margin of map %>
-<% map_offset_y = 40 # top margin of map %>
-<% locals = { :current_unit => @current_unit, :radius => radius, :map_offset_x => map_offset_x, :map_offset_y => map_offset_y }%>
 
-<%= render 'player' %>
-<%= render :partial => 'map', :locals => locals %>
-<%= render :partial => 'unit_orders', :locals => { :current_unit => @current_unit } %>
-<%= render :partial => 'battle_report', :locals => { :battle_report => @battle_report, :message_seperator => @message_seperator } %>
+<%= render :partial => 'player',        :locals => { :x => 20,   :y => 0 } %>
+<%= render :partial => 'map',           :locals => { :x => 20,   :y => 40,  :current_unit => @current_unit } %>
+<%= render :partial => 'unit_orders',   :locals => { :x => 1000, :y => 20,  :current_unit => @current_unit } %>
+<%= render :partial => 'battle_report', :locals => { :x => 20,   :y => 450, :battle_report => @battle_report } %>
+
+<% under_map_x = 20 %>
+<% under_map_y = 400 %>
 
 <div
   style="
     position: absolute;
-	left: 20px;
-	top: 400px;
+	left: <%= under_map_x %>px;
+	top: <%= under_map_y %>px;
 	z-index: 1
   ">
   <p>
     <%= link_to "Trigger Server Turn Update", test_turn_path %>
+	This link is used for testing purposes to simulate $turn_length amount of time passing.
   </p>
-  <p>Units can only be moved by the correct player. <br />Login as user:red@red.com, pass:red 
-  to move the "1" marker. <br />Login as user:blue@blue.com, pass:blue
-  to move the "2" marker. <br />
-  </p>
-  <p>If you are logged in, the current unit is highlighed as are all nodes the unit can travel to.<br />
-  Cick on one of those nodes to tell the unit to move there. On the next Server Turn update, the unit 
-  will move there. Currently the server only updates when the 
-  <%= link_to "Trigger Server Turn Update", test_turn_path %> linked is clicked. Note that it is 
-  protected by a password for admin use only</p>
-  <p>
-  I am using a single image to display the map. 
-  This seems the most easy and efficient way of displaying the map 
-   ** only a single HTTP request which can be cached easily **, this is signficiant as we're looking at
-   maps with many more nodes than we have here so we could be looking at saving ~100 HTTP requests
-   saving server time and speeding everything up <br/> 
-   also fewer chance of scaling issues, 
-   easy to edit, 
-   can have polygon shaped clickable areas)   
-  </p>
+
 </div>
+
+<% notice_x = 400 %>
+<% notice_y = 0 %>
 
 <div
   style="
     position: absolute;
-	left: 400px;
-	top: 0px;
+	left: <%= notice_x %>px;
+	top: <%= notice_y %>px;
 	z-index: 2
   ">
   <p id="notice"><%= notice %></p>

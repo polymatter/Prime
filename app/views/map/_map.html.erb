@@ -1,6 +1,9 @@
+<% radius = 20 # radius of clickable area around the centre of nodes %>
+<% x ||= 20 # left margin of map, default to 20 %>
+<% y ||= 40 # top margin of map, default to 40 %>
 <% magic_display_tweek = radius*-0.75 #### <-- needs investigating! %>
-<% offset_x = map_offset_x + magic_display_tweek %>
-<% offset_y = map_offset_y + magic_display_tweek %>
+<% offset_x = x + magic_display_tweek %>
+<% offset_y = y + magic_display_tweek %>
 
 <!--- 
  z-index: 1 ......... map background
@@ -17,8 +20,8 @@
   <div class='unit' id='unit_<%= unit.id %>'
     style="
 	  position: absolute;
-	  left: <%= unit.node.x + map_offset_x - (radius/2) %>px;
-	  top: <%= unit.node.y + map_offset_y - (radius/2) %>px;
+	  left: <%= unit.node.x + x - (radius/2) %>px;
+	  top: <%= unit.node.y + y - (radius/2) %>px;
 	  z-index: 4
     ">
   <% if unit != current_unit %>
@@ -32,8 +35,8 @@
   <div class='strength_<%= unit.strongest %>_text'
   style="
     position: absolute;
-	left: <%= map_offset_x + unit.node.x + unit_text_x %>px;
-	top:  <%= map_offset_y + unit.node.y + unit_text_y %>px;
+	left: <%= x + unit.node.x + unit_text_x %>px;
+	top:  <%= y + unit.node.y + unit_text_y %>px;
 	z-index: 5
   ">
   <%= unit[unit.strongest] %>
@@ -44,8 +47,8 @@
 <div class='map'
   style="
 	position: absolute;
-	left: <%= map_offset_x %>px;
-	top: <%= map_offset_y %>px;
+	left: <%= x %>px;
+	top: <%= y %>px;
 	z-index: 1
   ">
   <img src='<%= image_path(:"map.png") %>' border='1' />
