@@ -36,11 +36,11 @@ class Node < ActiveRecord::Base
 	  msg = "#{name} falls to invasion from #{unit.name}, by a margin of #{margin}"
 	  unit.log('player_invade_win',msg)
 	  self.update_attributes ({:is_human => true, :strength => 99 })
-	#if unit loses fight, respawn at starting node
+	#if unit loses fight, retreat
     else   
 	  msg = "#{name} repels invasion from #{unit.name}, by a margin of #{margin}"
 	  unit.log('player_invade_fail',msg)
-	  unit.move_message(1, 'respawns at')
+	  unit.retreat
 	  self.update_attributes ({:strength => strength - unit_strength })
     end  
   end
