@@ -1,0 +1,17 @@
+<div style="
+    position: absolute;
+	left: 1000px;
+	top: 200px;
+	z-index: 2;
+	background-color:#fff0f0;
+	width: 275px;
+  ">
+  Raw report: <br/><%= @battle_reports %>
+  <hr />
+  <% if @battle_reports %>
+    <% @battle_reports.each do |battle_report| %>
+      <b><%= battle_report.when.strftime("%a %d-%b %H:%M ") %></b>|<%= battle_report.notes %>
+	  <hr />
+    <% end %>
+  <% end %>
+</div>

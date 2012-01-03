@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Desc:</b>
+  <%= @turn_log.desc %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @turn_log.notes %>
+</p>
+
+<p>
+  <b>When:</b>
+  <%= @turn_log.when %>
+</p>
+
+<p>
+  <b>Unit:</b>
+  <%= @turn_log.unit_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_turn_log_path(@turn_log) %> |
+<%= link_to 'Back', turn_logs_path %>

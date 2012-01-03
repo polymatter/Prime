@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  desc: MyString
+  notes: MyText
+  when: 2011-12-28 22:11:50
+  unit_id: 1
+
+two:
+  desc: MyString
+  notes: MyText
+  when: 2011-12-28 22:11:50
+  unit_id: 1

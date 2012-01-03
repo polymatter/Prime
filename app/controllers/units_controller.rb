@@ -2,7 +2,8 @@ class UnitsController < ApplicationController
   http_basic_authenticate_with :name => "god", :password => "god", :except => [ :move, :cancel_move ]
 
   def turn
-	notices = ''
+	battle_reports = []
+	message_seperator = "|"
 	
 	#any moving units reach their destination.
 	#we do not set them to stationary yet though, just in case they retreat
@@ -24,14 +25,17 @@ class UnitsController < ApplicationController
 		  
 		  # there is no battle if either unit is nil
 		  if human_unit && computer_unit
-		  
+		    # decide on who is attacker, and who is the defender
 		    attacker = node.is_enemy(human_unit) ? human_unit    : computer_unit
 		    defender = node.is_enemy(human_unit) ? computer_unit : human_unit
 		  
 		    # resolve the fight
 		    battle_report = attacker.attack(defender)
-		    # display notices
-		    notices += battle_report[:message]
+			if battle_reports === []
+			  battle_reports << battle_report
+			else 
+			  battle_reports << message_seperator << battle_report
+			end
 		  end
 		end
 	  end
@@ -54,7 +58,7 @@ class UnitsController < ApplicationController
 	Unit.all.each { |unit| unit.update_attributes({ :node_link_id => 0}) }
 	
 	respond_to do |format|
-      format.html { redirect_to map_path, notice: notices + 'Turn update complete' }
+      format.html { redirect_to map_path(battle_reports), notice: 'Turn update complete' }
       format.json { head :ok }
 	end
 	

@@ -2,6 +2,7 @@ class Unit < ActiveRecord::Base
   belongs_to :node
   belongs_to :player
   belongs_to :node_link #represents the link a unit is traversing
+  has_many :turn_logs
   
   def can_retreat
     node_link && !node_link.node.has_enemy_units(self)
@@ -22,9 +23,16 @@ class Unit < ActiveRecord::Base
     end
   end
   
+  def log(code,msg)
+    l = TurnLog.new
+	l.update_attributes({ :notes => msg, :unit_id => self.id, :desc => code, :when => Time.now })
+  end
+  
   def move_message(node_id, verb)
+    msg = "#{name} #{verb} #{Node.find(node_id).name}"
+	log('move',msg)
     self.update_attributes({ :node_id => node_id})
-	"#{name} #{verb} #{Node.find(node_id).name}\n"
+	msg
   end
   
   def is_enemy(unit)
@@ -39,19 +47,32 @@ class Unit < ActiveRecord::Base
   end
   
   def battle_report(winner, loser)
-    if winner == self
-	  "#{name} attacked and defeated #{loser.name}\n"
+    win_msg = ''
+	fail_msg = ''
+	attacker = self # battle_report always called in attackers context
+	
+	if winner == attacker
+	  win_msg = "#{winner.name} attacked and defeated #{loser.name}"
+	  fail_msg = "#{loser.name} was attacked and defeated by #{winner.name}"
 	else
-	  "#{name} attacked, but was defeated by #{winner.name}\n"
+	  win_msg = "#{loser.name} attacked, but was repelled by #{winner.name}"
+	  fail_msg = "#{winner.name} was attacked, but repelled #{loser.name}"
 	end
+	
+	winner.log('battle_win',win_msg)
+    loser.log('battle_fail',fail_msg)
   end
   
   def attack(target_unit)
+    # strongest = name of this units strongest stat (either :red, :blue or :green)
+    attacker_margin = self[self.strongest] - target_unit[self.strongest]
     # if this unit attacks and wins
-    if self[self.strongest] > target_unit[self.strongest]
-	  { :result => :win, :message => battle_report(self, target_unit) + target_unit.retreat }
+    if attacker_margin > 0
+	  battle_report(self, target_unit)
+	  target_unit.retreat
 	else
-	  { :result => :lose, :message => battle_report(target_unit, self) + self.retreat }
+	  battle_report(target_unit, self)
+	  self.retreat
 	end
   end
   

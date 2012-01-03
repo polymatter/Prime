@@ -1,0 +1,31 @@
+<h1>Listing turn_logs</h1>
+
+<table border=1>
+  <tr>
+    <th>Id</th>
+    <th>Desc</th>
+    <th>Notes</th>
+    <th>When</th>
+    <th>Unit</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @turn_logs.each do |turn_log| %>
+  <tr>
+    <td><%= turn_log.id %></td>
+    <td><%= turn_log.desc %></td>
+    <td><%= turn_log.notes %></td>
+    <td><%= turn_log.when %></td>
+    <td><%= turn_log.unit_id %></td>
+    <td><%= link_to 'Show', turn_log %></td>
+    <td><%= link_to 'Edit', edit_turn_log_path(turn_log) %></td>
+    <td><%= link_to 'Destroy', turn_log, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Turn log', new_turn_log_path %>

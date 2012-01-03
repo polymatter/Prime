@@ -43,11 +43,13 @@ class Node < ActiveRecord::Base
 	if strength > unit_strength 
       update_attributes ({:strength => strength - unit_strength })
 	  unit.update_attributes ({:node_id => 1})
-	  return "#{name} falls to attack from #{unit.name}"
+	  msg = "#{name} falls to attack from #{unit.name}"
+	  unit.log('player_invade_win',msg)
 	#if unit loses fight, respawn at starting node
     else   
 	  update_attributes ({:node_type_id => 1, :strength => 99 })
-	  return "#{name} repels attack from #{unit.name}"
+	  msg = "#{name} repels attack from #{unit.name}"
+	  unit.log('player_invade_fail',msg)
     end  
   end
   
@@ -55,11 +57,13 @@ class Node < ActiveRecord::Base
     unit_strength = unit[unit.strongest]
 	
 	if strength > unit_strength
+	  msg = "#{name} repels attack from #{unit.name}"
+	  unit.log('computer_invade_fail',msg)
 	  update_attributes({:strength => strength - unit_strength })
-	  return "#{name} repels attack from #{unit.name}"
 	else
+	  msg = "#{name} fell to attack from #{unit.name}"
+	  unit.log('computer_invade_win',msg)
 	  update_attributes({:node_type_id => 2, :strength => 10 })
-	  return "#{name} fell to attack from #{unit.name}"
 	end
 	
   end
@@ -92,8 +96,16 @@ class Node < ActiveRecord::Base
     units.select {|unit| !unit.player.is_human }
   end
   
+  def passable_to_humans?
+    passable_to_humans
+  end
+  
   def passable_to_humans
     return node_type.name == "white"
+  end
+  
+  def passable_to_computers?
+    passable_to_computers
   end
   
   def passable_to_computers

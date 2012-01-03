@@ -1,4 +1,5 @@
 Prime::Application.routes.draw do
+  resources :turn_logs
   resources :node_types
   resources :node_links
   resources :units
