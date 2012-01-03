@@ -65,9 +65,9 @@ class Unit < ActiveRecord::Base
   
   def attack(target_unit)
     # strongest = name of this units strongest stat (either :red, :blue or :green)
-    attacker_margin = self[self.strongest] - target_unit[self.strongest]
+    margin = self[self.strongest] - target_unit[self.strongest]
     # if this unit attacks and wins
-    if attacker_margin > 0
+    if margin > 0
 	  battle_report(self, target_unit, margin)
 	  target_unit.retreat
 	else
