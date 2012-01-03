@@ -46,17 +46,17 @@ class Unit < ActiveRecord::Base
     node && node.is_enemy(self)
   end
   
-  def battle_report(winner, loser)
+  def battle_report(winner, loser, margin)
     win_msg = ''
 	fail_msg = ''
 	attacker = self # battle_report always called in attackers context
 	
 	if winner == attacker
-	  win_msg = "#{winner.name} attacked and defeated #{loser.name}"
-	  fail_msg = "#{loser.name} was attacked and defeated by #{winner.name}"
+	  win_msg = "#{winner.name} attacked and defeated #{loser.name}, by a margin of #{margin}"
+	  fail_msg = "#{loser.name} was attacked and defeated by #{winner.name}, by a margin of #{margin}"
 	else
-	  win_msg = "#{loser.name} attacked, but was repelled by #{winner.name}"
-	  fail_msg = "#{winner.name} was attacked, but repelled #{loser.name}"
+	  win_msg = "#{loser.name} attacked, but was repelled by #{winner.name}, by a margin of #{margin}"
+	  fail_msg = "#{winner.name} was attacked, but repelled #{loser.name}, by a margin of #{margin}"
 	end
 	
 	winner.log('battle_win',win_msg)
@@ -68,10 +68,10 @@ class Unit < ActiveRecord::Base
     attacker_margin = self[self.strongest] - target_unit[self.strongest]
     # if this unit attacks and wins
     if attacker_margin > 0
-	  battle_report(self, target_unit)
+	  battle_report(self, target_unit, margin)
 	  target_unit.retreat
 	else
-	  battle_report(target_unit, self)
+	  battle_report(target_unit, self, margin)
 	  self.retreat
 	end
   end

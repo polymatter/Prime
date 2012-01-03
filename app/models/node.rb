@@ -38,30 +38,34 @@ class Node < ActiveRecord::Base
 	else
 	  unit_strength = 0
 	end
-
+    # TEST: doesn't this mean, unit_strength = unit[node_type.name] ???
+	
+	margin = unit_strength - self.strength
+	
 	# if unit wins, node changes colour and its strength is restored	
-	if strength > unit_strength 
-      update_attributes ({:strength => strength - unit_strength })
-	  unit.update_attributes ({:node_id => 1})
-	  msg = "#{name} falls to attack from #{unit.name}"
+	if margin > 0
+	  msg = "#{name} falls to invasion from #{unit.name}, by a margin of #{margin}"
 	  unit.log('player_invade_win',msg)
+	  self.update_attributes ({:node_type_id => 1, :strength => 99 })
 	#if unit loses fight, respawn at starting node
     else   
-	  update_attributes ({:node_type_id => 1, :strength => 99 })
-	  msg = "#{name} repels attack from #{unit.name}"
+	  msg = "#{name} repels invasion from #{unit.name}, by a margin of #{margin}"
 	  unit.log('player_invade_fail',msg)
+	  unit.update_attributes ({:node_id => 1})
+	  self.update_attributes ({:strength => strength - unit_strength })
     end  
   end
   
   def fight_computer(unit)
     unit_strength = unit[unit.strongest]
+	margin = unit_strength - self.strength 
 	
-	if strength > unit_strength
-	  msg = "#{name} repels attack from #{unit.name}"
+	if margin < 0
+	  msg = "#{name} repels attack from #{unit.name}, by a margin of #{margin}"
 	  unit.log('computer_invade_fail',msg)
 	  update_attributes({:strength => strength - unit_strength })
 	else
-	  msg = "#{name} fell to attack from #{unit.name}"
+	  msg = "#{name} fell to attack from #{unit.name}, by a margin of #{margin}"
 	  unit.log('computer_invade_win',msg)
 	  update_attributes({:node_type_id => 2, :strength => 10 })
 	end
