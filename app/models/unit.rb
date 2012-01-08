@@ -8,6 +8,10 @@ class Unit < ActiveRecord::Base
     node_link && !node_link.node.has_enemy_units(self)
   end
   
+  def stationary
+    self.update_attributes({ :node_link_id => 0})
+  end
+  
   def retreat
     human_teleport_to_node_id = 1
 	computer_teleport_to_node_id = 5
@@ -26,6 +30,10 @@ class Unit < ActiveRecord::Base
   def log(code,msg)
     l = TurnLog.new
 	l.update_attributes({ :notes => msg, :unit_id => self.id, :desc => code, :when => Time.now })
+  end
+  
+  def move_with_undo
+    self.update_attributes({:node_id => destination.id})
   end
   
   def move_message(node_id, verb)
@@ -91,11 +99,7 @@ class Unit < ActiveRecord::Base
   end
   
   def destination
-    if moving?
-	  return node_link.linked_node
-	else
-	  return node
-	end
+    node_link ? node_link.linked_node : node
   end
   
   # returns the name of the stat that this player is strongest with

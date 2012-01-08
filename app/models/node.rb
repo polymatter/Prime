@@ -14,6 +14,10 @@ class Node < ActiveRecord::Base
 	# unit && ((unit.player.is_human || passable_to_humans) && !(unit.player.is_human && passable_to_humans))
   end
   
+  def battle_pairs
+    human_units.zip(computer_units)
+  end
+  
   def has_enemy_units(unit)
     unit.player.is_human ? has_computer_units : has_human_units
   end

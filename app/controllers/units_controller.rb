@@ -3,13 +3,10 @@ class UnitsController < ApplicationController
 
   def turn
 	battle_reports = []
-	message_seperator = "|"
 	
 	#any moving units reach their destination.
 	#we do not set them to stationary yet though, just in case they retreat
-	Unit.all.select { |unit| unit.moving? }.each do |unit| 
-	  unit.update_attributes({:node_id => unit.destination.id}) if unit
-	end
+	Unit.all.select { |unit| unit.moving? }.each { |unit| unit.move_with_undo }
 	
 	# resolve all conflict at each node
     Node.all.each do |node|
@@ -55,10 +52,10 @@ class UnitsController < ApplicationController
 	end
 	
 	#make all units stationary
-	Unit.all.each { |unit| unit.update_attributes({ :node_link_id => 0}) }
+	Unit.all.each { |unit| unit.stationary }
 	
 	respond_to do |format|
-      format.html { redirect_to map_path(battle_reports), notice: 'Turn update complete' }
+      format.html { redirect_to map_path, notice: 'Turn update complete' }
       format.json { head :ok }
 	end
 	
@@ -75,7 +72,7 @@ class UnitsController < ApplicationController
     @unit = current_player.units.find(params[:unit]) if current_player
 	
 	respond_to do |format|
-	  if !@unit.present?
+	  if !@unit
 	     format.html { redirect_to map_path, notice: 'Player probable does not have permission to cancel the move order' }
          format.json { render json: 'permission denied', status: :unprocessable_entry }
 	  elsif @unit.update_attributes({:node_link_id => 0})
@@ -93,7 +90,7 @@ class UnitsController < ApplicationController
 	@nodelink = NodeLink.find(params[:nodelink])
 	
 	if @unit && @nodelink
-	  move_order = @unit.name + ' will move from ' + @nodelink.node.name + ' to ' + @nodelink.linked_node.name
+	  move_order = "#{@unit.name} will move from #{@nodelink.node.name} to #{@nodelink.linked_node.name}"
 	end
 	
     respond_to do |format|
@@ -120,7 +117,7 @@ class UnitsController < ApplicationController
   # GET /units
   # GET /units.json
   def index
-    @units = Unit.all
+    @units = Unit.order(:id)
 
     respond_to do |format|
       format.html # index.html.erb
