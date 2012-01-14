@@ -16,9 +16,6 @@ class NodesController < ApplicationController
   # GET /nodes/1.json
   def show
     @node = Node.find(params[:id])
-	# [HACK] This page isn't important so this is fine.
-	# Its bad because this is only used to find nodes that link to it.
-	# The correct way is to make it part of the model, the way linked_nodes is
 	@inverse_linked_nodes = NodeLink.where("linked_node_id = '#{@node.id}'")
 
     respond_to do |format|

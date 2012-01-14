@@ -1,30 +1,49 @@
 class Unit < ActiveRecord::Base
+  extend Battle
+  
   belongs_to :node
   belongs_to :player
-  belongs_to :node_link #represents the link a unit is traversing
+  belongs_to :node_link #represents the link between nodes that a unit is traversing
   has_many :turn_logs
   
-  def can_retreat
-    node_link && !node_link.node.has_enemy_units(self)
-  end
+  @@human_home_node_id = 1 #respawn location for human units
+  @@computer_home_node_id = 5 #respawn location for computer units
   
-  def stationary
+  # used to ensure a unit doesn't move (since a unit will never be at node_id 0)
+  def stop
     self.update_attributes({ :node_link_id => 0})
   end
-  
+
   def retreat
-    human_teleport_to_node_id = 1
-	computer_teleport_to_node_id = 5
-  
-    if can_retreat
-	  move_message(node_link.node.id, "retreated to")
-	else
-	  if player.is_human
-	    move_message(human_teleport_to_node_id, "respawned at")
+    # unit was defending
+    if !moving?
+	  strongest_friendly_neighbour = location.neighbours.inject {|node1, node2| node1.strength > node2.strength ? node1 : node2}
+	  # able to retreat to friendly node
+	  if !strongest_friendly_neighbour.nil?
+	    dest = strongest_friendly_neighbour
+	    dest_id = strongest_friendly_neighbour.id
+		verb = 'retreated to'
+	  # surrounded, no friendly neighbouring node to retreat to
 	  else
-	    move_message(computer_teleport_to_node_id, "respawned at")
+	    # respawn destination
+	    dest_id = self.human? ? @@human_home_node_id : @@computer_home_node_id
+		verb = 'respawned at'
 	  end
-    end
+	# unit is retreating after attacking
+	else
+	  # retreat back to the node from where this unit came from
+	  dest = move_path.origin
+	  dest_id = move_path.origin.id
+	  verb = 'scattered back to'
+	end
+	
+	dest ||= Node.find(dest_id)
+	msg = "#{name} #{verb} #{dest.name}"
+	log('retreat',msg)
+	self.update_attributes({ :node_id => dest_id })
+	
+	# units retreating after a battle, can not then move	
+	self.stop
   end
   
   def log(code,msg)
@@ -32,74 +51,35 @@ class Unit < ActiveRecord::Base
 	l.update_attributes({ :notes => msg, :unit_id => self.id, :desc => code, :when => Time.now })
   end
   
-  def move_with_undo
-    self.update_attributes({:node_id => destination.id})
-  end
-  
-  def move_message(node_id, verb)
+  def move(node_id = destination.id, verb = 'moved to')
     msg = "#{name} #{verb} #{Node.find(node_id).name}"
 	log('move',msg)
     self.update_attributes({ :node_id => node_id})
-	msg
   end
   
-  def is_enemy(unit)
+  def move_order(new_move_path)
+    if new_move_path && (new_move_path.origin == self.location)
+      msg = "#{name} will move to #{new_move_path.destination.name} from #{self.location}"
+	  log('move_order', msg)
+	  self.update_attributes ({ :node_link_id => new_move_path.id })
+	else
+	  nil #indicate that move_order failed
+	end
+  end
+  
+  def enemy?(unit)
     # ^ is the XOR operator
-    player.is_human ^ unit.player.is_human
-	# same thing as
-	# (player.is_human || unit.player.is_human) && !(player.is_human && unit.player.is_human)
+    self.human? ^ unit.human?
   end
-  
-  def in_enemy_territory
-    node && node.is_enemy(self)
-  end
-  
-  def battle_report(winner, loser, margin)
-    win_msg = ''
-	fail_msg = ''
-	attacker = self # battle_report always called in attackers context
-	
-	if winner == attacker
-	  win_msg = "#{winner.name} attacked and defeated #{loser.name}, by a margin of #{margin}"
-	  fail_msg = "#{loser.name} was attacked and defeated by #{winner.name}, by a margin of #{margin}"
-	else
-	  win_msg = "#{loser.name} attacked, but was repelled by #{winner.name}, by a margin of #{margin}"
-	  fail_msg = "#{winner.name} was attacked, but repelled #{loser.name}, by a margin of #{margin}"
-	end
-	
-	winner.log('battle_win',win_msg)
-    loser.log('battle_fail',fail_msg)
-  end
-  
-  def attack(target_unit)
-    # strongest = name of this units strongest stat (either :red, :blue or :green)
-    margin = self[self.strongest] - target_unit[self.strongest]
-    # if this unit attacks and wins
-    if margin > 0
-	  battle_report(self, target_unit, margin)
-	  target_unit.retreat
-	else
-	  battle_report(target_unit, self, margin)
-	  self.retreat
-	end
-  end
-  
-  # a unit is moving if there is a valid node_link. 
-  # note that a stationary unit is modelled as one with a node_link_id of 0
+    
+  # a unit is moving if the unit is not yet at its destination
+  # a stationary unit is also modelled as one with a node_link_id of 0 (since a unit will never be at node_id 0)
   def moving?
-    node_link
+    move_path && (self.location != move_path.destination)
   end
-  
-  def move
-    if moving?
-	  undo = {:node_id => node_id}
-	  update_attributes ({:node_id => destination.id, :node_link_id => 0 })
-	  return undo
-	end
-  end
-  
+    
   def destination
-    node_link ? node_link.linked_node : node
+    move_path ? move_path.destination : self.location
   end
   
   # returns the name of the stat that this player is strongest with
@@ -111,5 +91,17 @@ class Unit < ActiveRecord::Base
 	else
 	  return :green
 	end
+  end
+  
+  def location
+    node
+  end
+  
+  def human?
+    player.is_human
+  end
+  
+  def move_path
+    node_link
   end
 end

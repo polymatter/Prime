@@ -3,11 +3,7 @@ class Player < ActiveRecord::Base
   validates_presence_of :password, :on => :create
   has_many :units
   
-  def is_human?
+  def human?
     is_human
-  end
-  
-  def is_computer?
-    !is_human
   end
 end
