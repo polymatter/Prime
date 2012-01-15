@@ -17,7 +17,7 @@ class Unit < ActiveRecord::Base
   def retreat
     # unit was defending
     if !moving?
-	  strongest_friendly_neighbour = location.neighbours.inject {|node1, node2| node1.strength > node2.strength ? node1 : node2}
+	  strongest_friendly_neighbour = location.neighbours.select{ |node| node.human? == self.human? }.inject {|node1, node2| node1.strength > node2.strength ? node1 : node2}
 	  # able to retreat to friendly node
 	  if !strongest_friendly_neighbour.nil?
 	    dest = strongest_friendly_neighbour
