@@ -78,6 +78,18 @@ class Unit < ActiveRecord::Base
     move_path && (self.location != move_path.destination)
   end
     
+  def self.move_all_human
+    move_all true
+  end
+  
+  def self.move_all_computer
+    move_all false
+  end
+  
+  def self.move_all(allegiance)
+    Unit.select { |unit| unit.moving? && (unit.human? == allegiance)}.each { |unit| unit.move }
+  end
+  
   def destination
     move_path ? move_path.destination : self.location
   end

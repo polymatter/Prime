@@ -3,15 +3,8 @@ module Battle
   @@win  = 'battle_win'
   @@fail = 'battle_fail'
   
-  def self.resolve_move_and_battles
-    # Move human units and computer units seperately to avoid units bypassing eachother
-    Unit.select { |unit| unit.moving? && unit.human? }.each { |unit| unit.move }
+  def self.resolve_battles
     Node.select { |node| node.under_attack? }.each { |node| resolve_battle_at(node) }
-  
-    Unit.select { |unit| unit.moving? && !unit.human? }.each { |unit| unit.move }
-    Node.select { |node| node.under_attack? }.each { |node| resolve_battle_at(node) }
-  
-    Unit.select { |unit| unit.moving? }.each { |unit| unit.stop }
   end
   
   # assumes node.under_attack? is true
